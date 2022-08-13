@@ -32,25 +32,25 @@ module.exports = {
     },
     {
       name: 'bonusrank',
-      description: 'Role which would recieve bonus entries',
+      description: 'Rank que receberá chances extras',
       type: 'ROLE',
       required: false
     },
     {
       name: 'bonusquantidade',
-      description: 'The amount of bonus entries the role will recieve',
+      description: 'Quantidade de chances que o rank receberá',
       type: 'INTEGER',
       required: false
     },
     {
       name: 'convite',
-      description: 'Invite of the server you want to add as giveaway joining requirement',
+      description: 'Convite do servidor que será requisito mínimo para entrar no sorteio',
       type: 'STRING',
       required: false
     },
     {
       name: 'rank',
-      description: 'Role you want to add as giveaway joining requirement',
+      description: 'Rank mínimo para entrar no sorteio',
       type: 'ROLE',
       required: false
     },
@@ -61,7 +61,7 @@ module.exports = {
     // If the member doesn't have enough permissions
     if (!interaction.member.permissions.has('MANAGE_MESSAGES') && !interaction.member.roles.cache.some((r) => r.name === "Giveaways")) {
       return interaction.reply({
-        content: ':x: You need to have the manage messages permissions to start giveaways.',
+        content: ':x: Você precisa ter as permissões de gerenciamento de mensagens para criar sorteios.',
         ephemeral: true
       });
     }
@@ -73,19 +73,19 @@ module.exports = {
 
     if (!giveawayChannel.isText()) {
       return interaction.reply({
-        content: ':x: Please select a text channel!',
+        content: ':x: Selecione um canal de texto!',
         ephemeral: true
       });
     }
    if(isNaN(ms(giveawayDuration))) {
     return interaction.reply({
-      content: ':x: Please select a valid duration!',
+      content: ':x: Selecione um tempo de duração válido!',
       ephemeral: true
     });
   }
     if (giveawayWinnerCount < 1) {
       return interaction.reply({
-        content: ':x: Please select a valid winner count! greater or equal to one.',
+        content: ':x: Selecione uma quantidade válida de ganhadores. Maior ou igual a um.',
       })
     }
 
@@ -97,7 +97,7 @@ module.exports = {
     if (bonusRole) {
       if (!bonusEntries) {
         return interaction.reply({
-          content: `:x: You must specify how many bonus entries would ${bonusRole} recieve!`,
+          content: `:x: Você deve especificar quantas chances de bônus ${bonusRole} irá receber!`,
           ephemeral: true
         });
       }
@@ -115,19 +115,18 @@ module.exports = {
       if (!client_is_in_server) {
         return interaction.editReply({
           embeds: [{
-            color: "#2F3136",
+            color: "#5964f4",
             author: {
               name: client.user.username,
               iconURL: client.user.displayAvatarURL() 
             },
-            title: "Server Check!",
-            url: "https://youtube.com/c/ZeroSync",
+            title: "Checando servidor",
             description:
-              "Woah woah woah! I see a new server! are you sure I am in that? You need to invite me there to set that as a requirement! 😳",
+              "Ei, ei, ei! Eu vejo um novo servidor! Tem certeza que estou lá? Você precisa me convidar lá para definir isso como um requisito! 😳",
             timestamp: new Date(),
             footer: {
               iconURL: client.user.displayAvatarURL(),
-              text: "Server Check"
+              text: "Checando servidor"
             }
           }]
         })
@@ -135,13 +134,13 @@ module.exports = {
     }
 
     if (rolereq && !invite) {
-      messages.inviteToParticipate = `**React with 🎉 to participate!**\n>>> - Only members having ${rolereq} are allowed to participate in this giveaway!`
+      messages.inviteToParticipate = `**Reaja com "🎉" para participar!**\n>>> - Apenas membros com ${rolereq} estão permitidos a participar desse sorteio!`
     }
     if (rolereq && invite) {
-      messages.inviteToParticipate = `**React with 🎉 to participate!**\n>>> - Only members having ${rolereq} are allowed to participate in this giveaway!\n- Members are required to join [this server](${invite}) to participate in this giveaway!`
+      messages.inviteToParticipate = `**Reaja com "🎉" para participar!**\n>>> - Apenas membros com ${rolereq} estão permitidos a participar desse sorteio!\n- Membros precisam entrar [neste servidor](${invite}) para participar desse sorteio!`
     }
     if (!rolereq && invite) {
-      messages.inviteToParticipate = `**React with 🎉 to participate!**\n>>> - Members are required to join [this server](${invite}) to participate in this giveaway!`
+      messages.inviteToParticipate = `**Reaja com "🎉" para participar!**\n>>> - Membros precisam entrar [neste servidor](${invite}) para participar desse sorteio!`
     }
 
 
@@ -170,15 +169,15 @@ module.exports = {
     });
     interaction.editReply({
       content:
-        `Giveaway started in ${giveawayChannel}!`,
+        `Sorteio iniciado em ${giveawayChannel}!`,
       ephemeral: true
     })
 
     if (bonusRole) {
       let giveaway = new Discord.MessageEmbed()
-        .setAuthor({ name: `Bonus Entries Alert!` })
+        .setAuthor({ name: `Alerta de entradas de bônus!` })
         .setDescription(
-          `**${bonusRole}** Has **${bonusEntries}** Extra Entries in this giveaway!`
+          `**${bonusRole}** possui **${bonusEntries}** chances a mais de ganhar esse sorteio!`
         )
         .setColor("#2F3136")
         .setTimestamp();
